@@ -181,10 +181,10 @@
                                     <tr>
                                         <td class="ps-4" style="width: 150px">
                                             <div class="col-md-3 form-check mb-2">
-                                                <input type="checkbox" class="form-check-input section-checkbox"
+                                                <input id="s{{ $section }}" type="checkbox" class="form-check-input section-checkbox"
                                                        data-section="{{ $module }}-{{ $section }}"
                                                     {{ $allChecked ? 'checked' : '' }} />
-                                                <label class="form-check-label">{{ $section }}</label>
+                                                <label class="form-check-label" for="s{{ $section }}">{{ $section }}</label>
                                             </div>
                                         </td>
                                         <td>

@@ -16,6 +16,7 @@
             </a>
         </li>
         @endcan
+        @can('Access Employee')
         <li class="nav-item">
             <a href="{{ route('permission.employees.index') }}"
                class="nav-link {{ request()->routeIs('permission.employees.*') ? 'active' : '' }}">
@@ -23,5 +24,6 @@
                 <p>Employee</p>
             </a>
         </li>
+        @endcan
     </ul>
 </li>

@@ -26,6 +26,10 @@ class PermissionDatabaseSeeder extends Seeder
             ['name' => 'Edit Role', 'module' => 'Permission', 'section' => 'Roles', 'guard_name' => 'web'],
             ['name' => 'Delete Role', 'module' => 'Permission', 'section' => 'Roles', 'guard_name' => 'web'],
             ['name' => 'Assign Permission', 'module' => 'Permission', 'section' => 'Roles', 'guard_name' => 'web'],
+            ['name' => 'Access Employee', 'module' => 'Permission', 'section' => 'Employee', 'guard_name' => 'web'],
+            ['name' => 'Change Status', 'module' => 'Permission', 'section' => 'Employee', 'guard_name' => 'web'],
+            ['name' => 'Assign Role', 'module' => 'Permission', 'section' => 'Employee', 'guard_name' => 'web'],
+            ['name' => 'Assign Branch', 'module' => 'Permission', 'section' => 'Employee', 'guard_name' => 'web'],
         ];
 
         $permissionInstances = [];

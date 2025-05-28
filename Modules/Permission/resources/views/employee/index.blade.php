@@ -42,6 +42,8 @@
             </div>
         </div>
     </div>
+    <!--status change form-->
+    <form id="changeStatusForm" action="#" method="post">@method('patch') @csrf</form>
 @endsection
 @section('item')
     <section>
@@ -88,20 +90,33 @@
                                     @endforelse
                                 </td>
                                 <td>
+                                    @can('Change Status')
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" value="" id="checkNativeSwitch" switch>
+                                        <input
+                                            id="checkNativeSwitch"
+                                            class="form-check-input"
+                                            onchange="changeStatus({{ $employee->id }})"
+                                            type="checkbox" value=""
+                                            @checked($employee->status)
+                                            @disabled($employee->hasRole('Admin'))
+                                            switch>
                                         <label class="form-check-label" for="checkNativeSwitch">
-                                            Active
+                                            {{ $employee->status ? 'Active' : 'InActive' }}
                                         </label>
                                     </div>
+                                    @endcan
                                 </td>
                                 <td>
+                                    @can('Assign Role')
                                     <button class="btn btn-sm btn-dark" data-bs-toggle="tooltip" data-bs-title="Assign Permission" onclick="openAssignRoleModal({{ $employee->id }})">
                                         <i class="bi bi-person-fill-lock"></i>
                                     </button>
+                                    @endcan
+                                    @can('Assign Branch')
                                     <button class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-title="Assign Branch">
                                         <i class="bi bi-shop"></i>
                                     </button>
+                                    @endcan
                                 </td>
                             </tr>
                             @empty
@@ -138,6 +153,13 @@
                 });
             });
             $('#assignRoleModal').modal('show');
+        }
+        //change status
+        function changeStatus(id) {
+            const action = url('{{ route("permission.employees.change-status", "__id__") }}', id);
+            const changeStatusForm = $('#changeStatusForm');
+            changeStatusForm.attr('action', action);
+            changeStatusForm.submit();
         }
     </script>
 @endpush

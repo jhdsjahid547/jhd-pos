@@ -1,3 +1,6 @@
+function url(routeTemplate, id) {
+    return routeTemplate.replace('__id__', id);
+}
 $(document).ready(function() {
     //tooltip
     $('[data-bs-toggle="tooltip"]').tooltip();
@@ -25,3 +28,5 @@ $(document).ready(function() {
         }
     }, 1000));
 });
+
+

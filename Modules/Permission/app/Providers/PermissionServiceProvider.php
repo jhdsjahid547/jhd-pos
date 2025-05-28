@@ -2,9 +2,11 @@
 
 namespace Modules\Permission\Providers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Permission\Policies\EmployeePolicy;
 use Modules\Permission\Policies\RolePolicy;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -30,6 +32,7 @@ class PermissionServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(User::class, EmployeePolicy::class);
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
     }
 

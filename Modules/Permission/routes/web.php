@@ -14,5 +14,6 @@ Route::middleware(['auth'])->prefix('permission')->as('permission.')->group(func
     Route::resource('roles', RoleController::class)->names('roles')->except(['create', 'edit']);
     Route::put('/roles/{role}/permissions', [RoleController::class, 'updateRolePermissions'])->name('roles.update-permissions');
     Route::resource('employees', EmployeeController::class)->names('employees');
+    Route::patch('/employees/{user}/change-status', [EmployeeController::class, 'changeStatus'])->name('employees.change-status');
 });
 

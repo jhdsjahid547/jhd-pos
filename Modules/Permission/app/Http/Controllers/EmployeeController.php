@@ -4,6 +4,7 @@ namespace Modules\Permission\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -73,4 +74,13 @@ class EmployeeController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id) {}
+
+    public function changeStatus(Request $request, User $user)
+    {
+        Gate::authorize('changeStatus', $user);
+        $user->status = !$user->status;
+        $user->save();
+        alertSuccess('Status successfully changed.');
+        return back();
+    }
 }
