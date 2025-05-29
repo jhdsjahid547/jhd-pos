@@ -5,7 +5,9 @@
     <li class="breadcrumb-item"><a href="#">Home</a></li>
 @endsection
 @section('modal')
-    <!-- Create Modal -->
+    <!--status change form-->
+    <form id="changeStatusForm" action="#" method="post">@method('patch') @csrf</form>
+    <!-- Assign Role Modal -->
     <div class="modal fade" id="assignRoleModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -18,21 +20,21 @@
                         @method('put')
                         @csrf
                         <div class="row py-2 px-4">
-                                @forelse($roles as $role)
+                            @forelse($roles as $role)
                                 <div class="col-md-3 form-check mb-2">
                                     <input type="checkbox" name="roles[]"
                                            class="form-check-input role-checkbox"
                                            value="{{ $role->name }}"
                                            id="role-{{ $role->id }}"
                                            data-role-id="{{ $role->id }}"
-                                         />
+                                    />
                                     <label class="form-check-label" for="role-{{ $role->id }}">
                                         <span class="badge bg-primary me-1">{{ $role->name }}</span>
                                     </label>
                                 </div>
-                                @empty
-                                    <span>No role found.</span>
-                                @endforelse
+                            @empty
+                                <span>No role found.</span>
+                            @endforelse
                             <div class="col-md-12 pt-2">
                                 <button type="submit" class="btn btn-sm btn-success float-end">Assign</button>
                             </div>
@@ -42,8 +44,43 @@
             </div>
         </div>
     </div>
-    <!--status change form-->
-    <form id="changeStatusForm" action="#" method="post">@method('patch') @csrf</form>
+    <!-- Assign Branch Modal -->
+    <div class="modal fade" id="assignBranchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">All Branches</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="assignBranch" action="#" method="post">
+                        @method('put')
+                        @csrf
+                        <div class="row py-2 px-4">
+                            @forelse($roles as $role)
+                                <div class="col-md-3 form-check mb-2">
+                                    <input type="checkbox" name="branches[]"
+                                           class="form-check-input role-checkbox"
+                                           value="{{ $role->name }}"
+                                           id="role-{{ $role->id }}"
+                                           data-role-id="{{ $role->id }}"
+                                    />
+                                    <label class="form-check-label" for="role-{{ $role->id }}">
+                                        <span class="badge bg-primary me-1">{{ $role->name }}</span>
+                                    </label>
+                                </div>
+                            @empty
+                                <span>No role found.</span>
+                            @endforelse
+                            <div class="col-md-12 pt-2">
+                                <button type="submit" class="btn btn-sm btn-success float-end">Assign</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('item')
     <section>
@@ -98,7 +135,7 @@
                                             onchange="changeStatus({{ $employee->id }})"
                                             type="checkbox" value=""
                                             @checked($employee->status)
-                                            @disabled($employee->hasRole('Admin'))
+                                            @disabled($employee->hasRole('Admin') && $employee->id == 1)
                                             switch>
                                         <label class="form-check-label" for="checkNativeSwitch">
                                             {{ $employee->status ? 'Active' : 'InActive' }}
@@ -113,7 +150,7 @@
                                     </button>
                                     @endcan
                                     @can('Assign Branch')
-                                    <button class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-title="Assign Branch">
+                                    <button class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-title="Assign Branch" onclick="openAssignBranchModal({{ $employee->id }})">
                                         <i class="bi bi-shop"></i>
                                     </button>
                                     @endcan
@@ -139,10 +176,8 @@
         function openAssignRoleModal(id) {
             $('.role-checkbox').prop('checked', false);
             const assignRoleForm = $('#assignRole');
-            let getUserRole = '{{ route('permission.employees.show', '__id__') }}';
-            let assignRole = '{{ route('permission.employees.update', '__id__') }}';
-            getUserRole = getUserRole.replace('__id__', id);
-            assignRole = assignRole.replace('__id__', id);
+            let getUserRole = url('{{ route("permission.employees.show", "__id__") }}', id);
+            let assignRole = url('{{ route("permission.employees.update", "__id__") }}', id);
             assignRoleForm.attr('action', assignRole);
             $.get(getUserRole, function(data) {
                 $('.role-checkbox').each(function() {
@@ -160,6 +195,10 @@
             const changeStatusForm = $('#changeStatusForm');
             changeStatusForm.attr('action', action);
             changeStatusForm.submit();
+        }
+        //assign branch
+        function openAssignBranchModal(id) {
+            $('#assignBranchModal').modal('show');
         }
     </script>
 @endpush

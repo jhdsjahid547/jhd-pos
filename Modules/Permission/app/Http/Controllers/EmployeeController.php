@@ -16,6 +16,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', User::class);
         $roles = Role::all();
         $employees = User::orderByRaw("id = ? desc", [Auth::id()])
             ->orderBy('created_at', 'desc')
@@ -47,6 +48,7 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+        Gate::authorize('assignRole', $user);
         $userRoles = $user->roles->pluck('id')->toArray();
         return response()->json($userRoles);
     }
@@ -65,6 +67,7 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+        Gate::authorize('assignRole', $user);
         $user->syncRoles($request->roles);
         alertSuccess('Roles successfully assigned.');
         return back();
